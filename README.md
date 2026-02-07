@@ -1,73 +1,40 @@
-# React + TypeScript + Vite
+# 📈 Opções Dados: Análise e Automação do Mercado Financeiro
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+![GitHub Repo Size](https://img.shields.io/github/repo-size/KleberMirandaMariano/opcoesdados?style=for-the-badge)
+![GitHub Language Count](https://img.shields.io/github/languages/count/KleberMirandaMariano/opcoesdados?style=for-the-badge)
+![GitHub Last Commit](https://img.shields.io/github/last-commit/KleberMirandaMariano/opcoesdados?style=for-the-badge)
 
-Currently, two official plugins are available:
+O **Opções Dados** é um projeto desenvolvido para facilitar a coleta, tratamento e análise de dados do mercado de opções da B3. Através da automação, o objetivo é transformar dados brutos em insights acionáveis para estratégias de derivativos.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🚀 Funcionalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+* **Extração Automatizada:** Coleta de dados de fontes públicas e APIs.
+* **Data Cleaning:** Pipeline de tratamento de dados pronto para análise.
+* **Cálculos Quantitativos:** Suporte inicial para cálculo de Gregas e Volatilidade.
+* **Análise Exploratória:** Notebooks integrados para visualização de tendências.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠️ Tecnologias e Ferramentas
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+O projeto utiliza as principais bibliotecas do ecossistema de **Data Science** e **Finanças**:
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| Ferramenta | Finalidade |
+| :--- | :--- |
+| **Python 3.x** | Linguagem principal |
+| **Pandas** | Manipulação de séries temporais e DataFrames |
+| **NumPy** | Operações matemáticas vetoriais |
+| **Matplotlib/Plotly** | Visualização de dados e gráficos interativos |
+| **Requests** | Consumo de dados via Web Scrapping/API |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## ⚙️ Instalação e Configuração
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Para rodar o projeto localmente, siga os passos abaixo:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. **Clonar o Repositório:**
+   ```bash
+   git clone [https://github.com/KleberMirandaMariano/opcoesdados.git](https://github.com/KleberMirandaMariano/opcoesdados.git)
