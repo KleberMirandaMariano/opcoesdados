@@ -38,12 +38,12 @@ export function Calculator() {
   const { maxProfit, maxLoss } = result ? calculateMaxProfitLoss(strike, result.price, type, 'LONG') : { maxProfit: '-', maxLoss: '-' };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-secondary/30 to-background">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-secondary/20 to-background">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">Calculadora Black-Scholes</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
+          <h2 className="text-3xl font-bold text-white mb-4 text-gradient-alt">Calculadora Black-Scholes</h2>
+          <p className="text-muted-foreground/90 max-w-2xl mx-auto text-base leading-relaxed">
             Calcule o preço teórico de opções europeias usando o modelo Black-Scholes. 
             Obtenha as gregas e análise de cenários em tempo real.
           </p>
@@ -51,9 +51,9 @@ export function Calculator() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Input Section */}
-          <Card className="glass-card">
+          <Card className="glass-card-hover card-elevated">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2 font-bold">
                 <CalculatorIcon className="w-5 h-5 text-teal-400" />
                 Parâmetros da Opção
               </CardTitle>
@@ -88,7 +88,7 @@ export function Calculator() {
                   type="number"
                   value={spot}
                   onChange={(e) => setSpot(Number(e.target.value))}
-                  className="bg-secondary/50 border-border/50"
+                  className="bg-secondary/40 border-border/40 focus:border-teal-400/50 transition-all"
                 />
                 <Slider
                   value={[spot]}

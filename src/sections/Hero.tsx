@@ -110,32 +110,33 @@ export function Hero() {
 
       {/* Gradient Overlays */}
       <div className="absolute inset-0 bg-gradient-to-b from-background via-transparent to-background z-10" />
-      <div className="absolute top-0 left-1/4 w-96 h-96 bg-teal-500/10 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl" />
+      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-teal-500/[0.12] rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/[0.12] rounded-full blur-3xl animate-pulse-slow" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/[0.08] rounded-full blur-3xl" />
 
       {/* Content */}
       <div className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32">
         <div className="text-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-teal-400/10 border border-teal-400/20 mb-8">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-teal-400/[0.12] to-cyan-400/[0.12] border border-teal-400/30 mb-8 glow-subtle animate-fade-in">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-teal-400" />
             </span>
-            <span className="text-sm text-teal-400 font-medium">
+            <span className="text-sm text-teal-300 font-semibold tracking-wide">
               Plataforma Profissional de Análise
             </span>
           </div>
 
           {/* Title */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-            <span className="text-white">Domine o Mercado</span>
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 animate-slide-up">
+            <span className="text-white drop-shadow-lg">Domine o Mercado</span>
             <br />
-            <span className="text-gradient">de Opções B3</span>
+            <span className="text-gradient drop-shadow-2xl">de Opções B3</span>
           </h1>
 
           {/* Description */}
-          <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
+          <p className="text-lg sm:text-xl text-muted-foreground/90 max-w-2xl mx-auto mb-10 leading-relaxed animate-fade-in">
             Ferramenta quantitativa completa para análise de opções. 
             Calcule gregas, visualize payoffs e tome decisões informadas 
             com precisão profissional.
@@ -146,7 +147,7 @@ export function Hero() {
             <Button
               size="lg"
               onClick={() => scrollToSection('calculator')}
-              className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-background font-semibold px-8"
+              className="bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-background font-semibold px-8 shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-300 hover:scale-105"
             >
               Começar Agora
               <ArrowRight className="w-5 h-5 ml-2" />
@@ -155,7 +156,7 @@ export function Hero() {
               size="lg"
               variant="outline"
               onClick={() => scrollToSection('dashboard')}
-              className="border-white/20 hover:bg-white/5"
+              className="border-white/20 hover:bg-white/[0.08] hover:border-white/30 transition-all duration-300"
             >
               Explorar Dashboard
             </Button>
@@ -163,31 +164,31 @@ export function Hero() {
 
           {/* Features */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-3xl mx-auto">
-            <div className="flex flex-col items-center gap-3 p-4">
-              <div className="w-12 h-12 rounded-xl bg-teal-400/10 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-teal-400" />
+            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl glass-card-hover">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400/20 to-teal-500/10 flex items-center justify-center glow-subtle">
+                <TrendingUp className="w-7 h-7 text-teal-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-white">Análise em Tempo Real</h3>
-                <p className="text-sm text-muted-foreground">Dados atualizados da B3</p>
+                <h3 className="font-semibold text-white text-base">Análise em Tempo Real</h3>
+                <p className="text-sm text-muted-foreground/80">Dados atualizados da B3</p>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-3 p-4">
-              <div className="w-12 h-12 rounded-xl bg-cyan-400/10 flex items-center justify-center">
-                <Shield className="w-6 h-6 text-cyan-400" />
+            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl glass-card-hover">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-cyan-400/20 to-cyan-500/10 flex items-center justify-center glow-subtle">
+                <Shield className="w-7 h-7 text-cyan-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-white">Modelo Black-Scholes</h3>
-                <p className="text-sm text-muted-foreground">Precificação precisa</p>
+                <h3 className="font-semibold text-white text-base">Modelo Black-Scholes</h3>
+                <p className="text-sm text-muted-foreground/80">Precificação precisa</p>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-3 p-4">
-              <div className="w-12 h-12 rounded-xl bg-teal-400/10 flex items-center justify-center">
-                <Zap className="w-6 h-6 text-teal-400" />
+            <div className="flex flex-col items-center gap-3 p-6 rounded-2xl glass-card-hover">
+              <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400/20 to-emerald-500/10 flex items-center justify-center glow-subtle">
+                <Zap className="w-7 h-7 text-teal-400" />
               </div>
               <div>
-                <h3 className="font-semibold text-white">Cálculo de Gregas</h3>
-                <p className="text-sm text-muted-foreground">Gestão de risco completa</p>
+                <h3 className="font-semibold text-white text-base">Cálculo de Gregas</h3>
+                <p className="text-sm text-muted-foreground/80">Gestão de risco completa</p>
               </div>
             </div>
           </div>

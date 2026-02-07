@@ -50,7 +50,7 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled
-          ? 'bg-background/80 backdrop-blur-xl border-b border-border/50'
+          ? 'bg-background/70 backdrop-blur-2xl border-b border-border/40 shadow-lg shadow-black/5'
           : 'bg-transparent'
       }`}
     >
@@ -58,12 +58,12 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <div className="flex items-center gap-2">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 flex items-center justify-center shadow-lg shadow-teal-500/30">
               <TrendingUp className="w-6 h-6 text-background" />
             </div>
             <div className="hidden sm:block">
               <span className="font-bold text-lg text-gradient">OpçõesExpert</span>
-              <span className="text-xs text-muted-foreground block -mt-1">B3 Analytics</span>
+              <span className="text-xs text-muted-foreground/80 block -mt-1">B3 Analytics</span>
             </div>
           </div>
 
@@ -77,10 +77,10 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                   variant="ghost"
                   size="sm"
                   onClick={() => scrollToSection(item.id)}
-                  className={`flex items-center gap-2 transition-all ${
+                  className={`flex items-center gap-2 transition-all duration-300 ${
                     activeSection === item.id
-                      ? 'text-teal-400 bg-teal-400/10'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-white/5'
+                      ? 'text-teal-400 bg-teal-400/[0.12] shadow-sm shadow-teal-500/20'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-white/[0.06]'
                   }`}
                 >
                   <Icon className="w-4 h-4" />
@@ -116,10 +116,10 @@ export function Navbar({ activeSection, onSectionChange }: NavbarProps) {
                     key={item.id}
                     variant="ghost"
                     onClick={() => scrollToSection(item.id)}
-                    className={`flex items-center gap-3 justify-start ${
+                    className={`flex items-center gap-3 justify-start transition-all duration-300 ${
                       activeSection === item.id
-                        ? 'text-teal-400 bg-teal-400/10'
-                        : 'text-muted-foreground'
+                        ? 'text-teal-400 bg-teal-400/[0.12] shadow-sm shadow-teal-500/20'
+                        : 'text-muted-foreground hover:bg-white/[0.06]'
                     }`}
                   >
                     <Icon className="w-5 h-5" />

@@ -138,27 +138,27 @@ export function Dashboard() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8">
+    <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-background via-background to-background/95">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-10">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-2">Dashboard de Mercado</h2>
-            <p className="text-muted-foreground">
+            <h2 className="text-3xl font-bold text-white mb-2 text-gradient-alt">Dashboard de Mercado</h2>
+            <p className="text-muted-foreground/90 text-base">
               Acompanhe os principais ativos do mercado brasileiro em tempo real
             </p>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <Clock className="w-4 h-4" />
-            <span className="text-sm">
+          <div className="flex items-center gap-2 text-muted-foreground/80 bg-secondary/30 px-4 py-2 rounded-lg border border-border/30">
+            <Clock className="w-4 h-4 text-teal-400" />
+            <span className="text-sm font-medium">
               {currentTime.toLocaleTimeString('pt-BR')} - {currentTime.toLocaleDateString('pt-BR')}
             </span>
           </div>
         </div>
 
         {/* Search Bar */}
-        <Card className="glass-card mb-8">
-          <CardContent className="p-4">
+        <Card className="glass-card-hover mb-8 glow-subtle">
+          <CardContent className="p-6">
             <form onSubmit={handleSearch} className="relative">
               <div className="flex gap-2">
                 <div className="relative flex-1">
@@ -172,7 +172,7 @@ export function Dashboard() {
                       setShowSuggestions(e.target.value.length > 0);
                     }}
                     onFocus={() => searchQuery && setShowSuggestions(true)}
-                    className="pl-10 pr-10 h-12 bg-secondary/50 border-border/50 text-white placeholder:text-muted-foreground"
+                    className="pl-10 pr-10 h-12 bg-secondary/40 border-border/40 text-white placeholder:text-muted-foreground/70 focus:border-teal-400/50 transition-all"
                   />
                   {searchQuery && (
                     <button
@@ -186,7 +186,7 @@ export function Dashboard() {
                 </div>
                 <Button 
                   type="submit" 
-                  className="h-12 px-6 bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-background font-semibold"
+                  className="h-12 px-6 bg-gradient-to-r from-teal-400 to-cyan-500 hover:from-teal-500 hover:to-cyan-600 text-background font-semibold shadow-lg hover:shadow-xl hover:shadow-teal-500/30 transition-all duration-300"
                 >
                   Buscar
                 </Button>
@@ -194,8 +194,8 @@ export function Dashboard() {
 
               {/* Suggestions Dropdown */}
               {showSuggestions && suggestions.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-lg shadow-xl z-50 overflow-hidden">
-                  <div className="p-2 text-xs text-muted-foreground border-b border-border/50">
+                <div className="absolute top-full left-0 right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/60 rounded-lg shadow-2xl z-50 overflow-hidden animate-slide-up">
+                  <div className="p-3 text-xs text-muted-foreground/80 border-b border-border/40 font-medium">
                     Sugestões ({suggestions.length})
                   </div>
                   {suggestions.map((asset) => (
@@ -203,7 +203,7 @@ export function Dashboard() {
                       key={asset.symbol}
                       type="button"
                       onClick={() => handleSelectAsset(asset)}
-                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/5 transition-colors text-left"
+                      className="w-full px-4 py-3 flex items-center justify-between hover:bg-white/[0.08] transition-all duration-200 text-left border-b border-border/20 last:border-0"
                     >
                       <div>
                         <span className="font-semibold text-white">{asset.symbol}</span>
@@ -221,15 +221,15 @@ export function Dashboard() {
               )}
 
               {showSuggestions && searchQuery && suggestions.length === 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-lg shadow-xl z-50 p-4 text-center">
-                  <p className="text-muted-foreground">Nenhum ativo encontrado para &quot;{searchQuery}&quot;</p>
+                <div className="absolute top-full left-0 right-0 mt-2 bg-card/95 backdrop-blur-xl border border-border/60 rounded-lg shadow-2xl z-50 p-4 text-center animate-slide-up">
+                  <p className="text-muted-foreground/80">Nenhum ativo encontrado para &quot;{searchQuery}&quot;</p>
                 </div>
               )}
             </form>
 
             {/* Quick Tags */}
             <div className="flex flex-wrap gap-2 mt-4">
-              <span className="text-xs text-muted-foreground">Populares:</span>
+              <span className="text-xs text-muted-foreground/80 font-medium">Populares:</span>
               {['PETR4', 'VALE3', 'ITUB4', 'BBDC4', 'WEGE3', 'BOVA11'].map((symbol) => {
                 const asset = mockAssets.find(a => a.symbol === symbol);
                 if (!asset) return null;
@@ -238,7 +238,7 @@ export function Dashboard() {
                     key={symbol}
                     type="button"
                     onClick={() => handleSelectAsset(asset)}
-                    className="px-3 py-1 text-xs rounded-full bg-white/5 hover:bg-teal-400/20 text-white hover:text-teal-400 transition-colors border border-white/10"
+                    className="px-3 py-1.5 text-xs rounded-full bg-white/[0.06] hover:bg-teal-400/20 text-white hover:text-teal-400 transition-all duration-300 border border-white/[0.12] hover:border-teal-400/40 hover:shadow-sm hover:shadow-teal-500/20"
                   >
                     {symbol}
                   </button>
@@ -251,8 +251,8 @@ export function Dashboard() {
         {/* Market Indicators */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
           {marketIndicators.map((indicator) => (
-            <Card key={indicator.label} className="glass-card glow-teal">
-              <CardContent className="p-4">
+            <Card key={indicator.label} className="glass-card-hover glow-subtle card-elevated">
+              <CardContent className="p-5">
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{indicator.label}</span>
                   <Activity className="w-4 h-4 text-teal-400" />
@@ -285,9 +285,9 @@ export function Dashboard() {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Assets List */}
-          <Card className="glass-card lg:col-span-2">
+          <Card className="glass-card-hover lg:col-span-2 card-elevated">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg flex items-center gap-2">
+              <CardTitle className="text-lg flex items-center gap-2 font-bold">
                 <BarChart3 className="w-5 h-5 text-teal-400" />
                 {searchQuery ? `Resultados da Busca (${filteredAssets.length})` : 'Ativos Mais Negociados'}
               </CardTitle>
