@@ -178,6 +178,16 @@ def fetch_indicators():
     except:
         return []
 
+@st.cache_data(ttl=3600)
+def fetch_options(symbol):
+    try:
+        response = requests.get(f"{API_URL}/market/options/{symbol}")
+        if response.status_code == 200:
+            return response.json()
+        return []
+    except:
+        return []
+
 # --- 1. NAVBAR ---
 def render_navbar():
     st.markdown(f"""
@@ -238,12 +248,15 @@ def render_dashboard():
         st.markdown(f'<div style="text-align: right; color: #94a3b8; font-size: 14px; margin-top: 10px;">🕒 {datetime.now().strftime("%H:%M:%S - %d/%m/%Y")}</div>', unsafe_allow_html=True)
 
     # Search Bar (Simplified simulation)
-    st.markdown("""
-    <div class="glass-card" style="padding: 15px; margin-bottom: 30px;">
-        <input type="text" placeholder="Digite o código da ação (ex: PETR4, VALE3, ITUB4...)" 
-               style="width: 100%; height: 48px; background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding-left: 40px; color: white;">
-    </div>
-    """, unsafe_allow_html=True)
+    search_query = st.text_input(
+        "Digite o código da ação (ex: PETR4, VALE3, ITUB4...)",
+        placeholder="PETR4",
+        label_visibility="collapsed"
+    )
+    if not search_query:
+        search_query = "PETR4"
+    
+    selected_asset_symbol = search_query.upper()
     
     # Indicators
     indicators = fetch_indicators()
@@ -299,7 +312,10 @@ def render_dashboard():
 
     with col_t2:
         if assets:
-            sel = assets[0] # Default to first for mock
+            # Find selected asset by symbol or default to PETR4
+            sel_list = [a for a in assets if a['symbol'] == selected_asset_symbol]
+            sel = sel_list[0] if sel_list else assets[0]
+            
             st.markdown(f"""
             <div class="glass-card" style="box-shadow: 0 0 40px rgba(34, 211, 238, 0.15); border-color: rgba(34, 211, 238, 0.3);">
                 <div style="font-weight: 600; font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;"><span style="color: #22d3ee;">💰</span> {sel['symbol']} - Detalhes</div>
@@ -427,43 +443,42 @@ def render_option_chain():
     st.markdown('<div class="glass-card">', unsafe_allow_html=True)
     
     # Header buttons simulation
-    st.markdown("""
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <div style="display: flex; gap: 10px;">
-            <span class="btn-primary" style="padding: 5px 15px; font-size: 12px; cursor: pointer;">PETR4</span>
-            <span class="btn-outline" style="padding: 5px 15px; font-size: 12px; cursor: pointer;">VALE3</span>
-            <span class="btn-outline" style="padding: 5px 15px; font-size: 12px; cursor: pointer;">ITUB4</span>
-        </div>
-        <div style="color: #94a3b8; font-size: 14px;">Vencimento: <span style="color: white; font-weight: 600;">20 Fev 2026</span> (32 dias)</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Simplified mock table matching the original React columns
-    data = []
-    for strike in range(30, 45):
-        data.append({
-            "Strike": strike,
-            "C_Last": 1.25 + (37 - strike) * 0.8 if strike < 37 else 0.5/(strike-36),
-            "C_Vol": 1200 - (strike - 37)**2 * 50,
-            "IV": 32 + (strike/37 - 1)**2 * 50,
-            "P_Last": 1.25 + (strike - 37) * 0.8 if strike > 37 else 0.5/(38-strike),
-            "P_Vol": 800 - (strike - 37)**2 * 30,
-        })
-    df = pd.DataFrame(data)
+    cols_btn = st.columns([3, 1])
+    with cols_btn[0]:
+        st.markdown(f"**Ativo Atualmente Selecionado: {selected_asset_symbol}**")
     
-    st.dataframe(
-        df,
-        use_container_width=True,
-        column_config={
-            "C_Vol": st.column_config.NumberColumn("Vol CALL", format="%d"),
-            "C_Last": st.column_config.NumberColumn("Last CALL", format="R$ %.2f"),
-            "Strike": st.column_config.NumberColumn("Strike", format="R$ %.2f"),
-            "IV": st.column_config.NumberColumn("IV %", format="%.1f%%"),
-            "P_Last": st.column_config.NumberColumn("Last PUT", format="R$ %.2f"),
-            "P_Vol": st.column_config.NumberColumn("Vol PUT", format="%d"),
-        },
-        hide_index=True
-    )
+    options_data = fetch_options(selected_asset_symbol)
+    if options_data:
+        df_opt = pd.DataFrame(options_data)
+        # Process data for display
+        calls = df_opt[df_opt['type'] == 'CALL'].copy()
+        puts = df_opt[df_opt['type'] == 'PUT'].copy()
+        
+        # Merge on strike to show side-by-side
+        merged = pd.merge(
+            calls[['strike', 'symbol', 'price', 'volume']], 
+            puts[['strike', 'symbol', 'price', 'volume']], 
+            on='strike', 
+            how='outer', 
+            suffixes=('_C', '_P')
+        ).sort_values('strike')
+        
+        st.dataframe(
+            merged,
+            use_container_width=True,
+            column_config={
+                "volume_C": st.column_config.NumberColumn("Vol CALL", format="%d"),
+                "price_C": st.column_config.NumberColumn("Last CALL", format="R$ %.2f"),
+                "symbol_C": "Ticker CALL",
+                "strike": st.column_config.NumberColumn("Strike", format="R$ %.2f"),
+                "symbol_P": "Ticker PUT",
+                "price_P": st.column_config.NumberColumn("Last PUT", format="R$ %.2f"),
+                "volume_P": st.column_config.NumberColumn("Vol PUT", format="%d"),
+            },
+            hide_index=True
+        )
+    else:
+        st.info(f"Nenhuma opção encontrada para {selected_asset_symbol} na data mais recente da B3.")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # --- MAIN EXECUTION ---

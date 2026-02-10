@@ -7,6 +7,7 @@ from .models import (
     MarketAsset, MarketIndicator
 )
 from .logic import calculate_black_scholes, calculate_payoff
+from .data_fetcher import fetcher
 
 app = FastAPI(title="Options Analysis API")
 
@@ -43,6 +44,16 @@ async def get_indicators():
 @app.get("/market/assets", response_model=List[MarketAsset])
 async def get_assets():
     return MOCK_ASSETS
+
+@app.get("/market/options/{symbol}")
+async def get_options(symbol: str):
+    try:
+        options = fetcher.get_options_for_symbol(symbol.upper())
+        if not options:
+            return []
+        return options
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @app.post("/calculate/option", response_model=OptionResult)
 async def calculate_option(request: OptionRequest):
