@@ -3,6 +3,8 @@ import b3cotahist
 import pandas as pd
 from typing import List, Dict, Optional
 import os
+import subprocess
+import io
 
 CACHE_DIR = "cache_b3"
 if not os.path.exists(CACHE_DIR):
@@ -64,17 +66,59 @@ class B3DataFetcher:
                 return self.fetch_data(prev_date)
             return None
 
+    def fetch_with_rb3(self, symbol: str) -> List[Dict]:
+        """Calls the R script to fetch data using RB3 package."""
+        r_script = os.path.join(os.path.dirname(__file__), "..", "scripts", "rb3_options_fetcher.R")
+        
+        # Try different Rscript executable locations
+        executables = ["Rscript", 
+                       r"C:\Program Files\R\R-4.3.2\bin\x64\Rscript.exe",
+                       r"C:\Program Files\R\R-4.3.1\bin\x64\Rscript.exe"]
+        
+        stdout = None
+        for exe in executables:
+            try:
+                result = subprocess.run([exe, r_script, symbol], capture_output=True, text=True, check=True)
+                stdout = result.stdout
+                break
+            except (subprocess.CalledProcessError, FileNotFoundError):
+                continue
+        
+        if not stdout:
+            print("RB3 fetch failed or R not found.")
+            return []
+            
+        try:
+            # Parse the CSV output from R
+            df = pd.read_csv(io.StringIO(stdout))
+            results = []
+            for _, row in df.iterrows():
+                results.append({
+                    "symbol": row['symbol'],
+                    "strike": row['strike'],
+                    "price": row['price_close'],
+                    "type": row['type'],
+                    "maturity_date": str(row['maturity_date']),
+                    "volume": row['volume']
+                })
+            return results
+        except Exception as e:
+            print(f"Error parsing RB3 output: {e}")
+            return []
+
     def get_options_for_symbol(self, symbol: str) -> List[Dict]:
+        # Prefer RB3 for more updated/complete data as requested by user
+        print(f"Attempting to fetch {symbol} options via RB3...")
+        rb3_data = self.fetch_with_rb3(symbol)
+        if rb3_data:
+            return rb3_data
+            
+        # Fallback to COTAHIST if RB3 fails
+        print("Falling back to COTAHIST...")
         df = self.fetch_data()
         if df is None:
             return []
         
-        # In COTAHIST, the 'NOME_DA_EMPRESA' or 'CODIGO_DE_NEGOCIACAO' can be used
-        # Ticker of option usually starts with underlying asset symbol
-        # We look for options where the underlying asset symbol is related
-        # This is a bit simplified, but works for common stocks like PETR4, VALE3
-        
-        # Filter options where the ticker starts with the symbol prefix (e.g. PETR for PETR4)
         prefix = symbol[:4] 
         df_filtered = df[df['CODIGO_DE_NEGOCIACAO'].str.startswith(prefix)]
         
@@ -94,11 +138,6 @@ class B3DataFetcher:
         # For stocks (TIPO_DE_MERCADO = 'VISTA')
         if self.cached_date is None:
             self.fetch_data()
-        
-        # We need to fetch all data or keep the unfiltered df
-        # Let's re-fetch just for the asset if needed, or modify fetch_data
-        # For now, let's assume we want to keep it simple and just return a mock or use yfinance for underlying
-        # The user asked specifically for b3cotahist for real-time options values.
         pass
 
 fetcher = B3DataFetcher()
